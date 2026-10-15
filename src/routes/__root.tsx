@@ -12,6 +12,11 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { MailProvider } from "@/context/MailContext";
+import { Drawer } from "@/components/mail/Drawer";
+import { Compose } from "@/components/mail/Compose";
+import { Toaster } from "@/components/ui/sonner";
+import { appConfig } from "@/config/appConfig";
 
 function NotFoundComponent() {
   return (
@@ -78,11 +83,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Mail" },
+      { name: "description", content: "Mobile-first email demo" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -93,6 +95,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" },
     ],
   }),
   shellComponent: RootShell,
@@ -103,9 +108,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem("mail-demo-theme")||"${appConfig.app.defaultTheme}";if(t==="dark")document.documentElement.classList.add("dark")}catch(e){}` }} />
       </head>
       <body>
         {children}
@@ -121,7 +127,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <MailProvider>
+        <div className="mx-auto max-w-2xl">
+          <Outlet />
+        </div>
+        <Drawer />
+        <Compose />
+        <Toaster position="bottom-center" />
+      </MailProvider>
     </QueryClientProvider>
   );
 }
