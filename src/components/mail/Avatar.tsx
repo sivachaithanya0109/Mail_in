@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 export function Avatar({
   name, src, size = 40, selected, label,
-}: { name: string; src?: string; size?: number; selected?: boolean; label?: string }) {
+}: { name: string; src?: string | undefined; size?: number; selected?: boolean; label?: string | undefined }) {
   const style = { width: size, height: size };
   if (selected)
     return (

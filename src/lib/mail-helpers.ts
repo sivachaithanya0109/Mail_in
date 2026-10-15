@@ -36,14 +36,14 @@ export function formatFullTime(iso: string) {
 
 export function initials(name: string) {
   const parts = name.trim().split(/\s+/);
-  return ((parts[0]?.[0] ?? "?") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase().slice(0, 1);
+  return ((parts[0]?.[0] ?? "?") + (parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? "") : "")).toUpperCase().slice(0, 1);
 }
 
 const avatarClasses = ["bg-avatar-1", "bg-avatar-2", "bg-avatar-3", "bg-avatar-4", "bg-avatar-5", "bg-avatar-6"];
 export function avatarClass(seed: string) {
   let h = 0;
   for (const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return avatarClasses[h % avatarClasses.length];
+  return avatarClasses[h % avatarClasses.length] ?? "bg-avatar-1";
 }
 
 export function filterByFolder(emails: Email[], folder: string, tab: Category): Email[] {
@@ -85,7 +85,7 @@ export function parseAddresses(s: string) {
     .filter(Boolean)
     .map((x) => {
       const m = x.match(/^(.*)<(.+)>$/);
-      return m ? { name: m[1].trim() || m[2], email: m[2].trim() } : { name: x.split("@")[0], email: x };
+      return m ? { name: (m[1] ?? "").trim() || (m[2] ?? ""), email: (m[2] ?? "").trim() } : { name: x.split("@")[0] ?? x, email: x };
     });
 }
 

@@ -43,12 +43,12 @@ function ComposeForm({ initial }: { initial: ComposeDraft }) {
     closeCompose();
   };
 
-  const send = () => {
+  const send = (): void => {
     if (sending) return;
     const all = [...parseAddresses(f.to), ...parseAddresses(f.cc), ...parseAddresses(f.bcc)];
-    if (!parseAddresses(f.to).length) return toast.error("Add at least one recipient");
+    if (!parseAddresses(f.to).length) { toast.error("Add at least one recipient"); return; }
     const bad = all.find((a) => !isValidEmail(a.email));
-    if (bad) return toast.error(`"${bad.email}" isn't a valid address`);
+    if (bad) { toast.error(`"${bad.email}" isn't a valid address`); return; }
     setSending(true);
     saveEmail(build("sent"));
     toast("Message sent (saved to Sent — demo only)");
