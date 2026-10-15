@@ -62,6 +62,10 @@ export interface Email {
   attachments: Attachment[];
   labels: string[];
   security?: SecurityDetails;
+  /** Shows a verified badge next to the sender. Only set for senders you trust. */
+  verified?: boolean;
+  /** Shows the Unsubscribe action in the sender row. */
+  unsubscribe?: boolean;
 }
 
 export interface FolderConfig {
@@ -78,7 +82,7 @@ export interface LabelConfig {
 export interface BottomNavItem {
   label: string;
   icon: IconName;
-  folder: FolderId;
+  path: "/" | "/chat" | "/meet";
 }
 
 export interface AppConfig {
@@ -103,6 +107,19 @@ export interface AppConfig {
     securityLink: string;
     demoDisclaimer: string;
     tabs: { primary: string; promotions: string; social: string };
+    inboxChip: string;
+    toMe: string;
+    unsubscribe: string;
+    reply: string;
+    forward: string;
+    securityTitle: string;
+    mailedBy: string;
+    signedBy: string;
+    security: string;
+    learnMore: string;
+    learnMoreInfo: string;
+    chatEmpty: string;
+    meetEmpty: string;
   };
   folders: FolderConfig[];
   labels: LabelConfig[];

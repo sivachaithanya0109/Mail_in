@@ -37,6 +37,13 @@
   --color-star: var(--star);
   --color-important: var(--important);
   --color-chip: var(--chip);
+  --color-pill: var(--pill);
+  --color-pill-foreground: var(--pill-foreground);
+  --color-panel: var(--panel);
+  --color-link: var(--link);
+  --color-nav: var(--nav);
+  --color-badge: var(--badge);
+  --color-badge-foreground: var(--badge-foreground);
   --color-avatar-1: var(--avatar-1);
   --color-avatar-2: var(--avatar-2);
   --color-avatar-3: var(--avatar-3);
@@ -74,6 +81,13 @@
   --star: oklch(0.78 0.16 80);
   --important: oklch(0.8 0.15 85);
   --chip: oklch(0.93 0.005 260);
+  --pill: oklch(0.92 0.03 270);
+  --pill-foreground: oklch(0.25 0.03 270);
+  --panel: oklch(0.96 0.006 260);
+  --link: oklch(0.5 0.17 262);
+  --nav: oklch(0.96 0.01 260);
+  --badge: oklch(0.8 0.08 20);
+  --badge-foreground: oklch(0.3 0.08 20);
   --avatar-1: oklch(0.55 0.2 27);
   --avatar-2: oklch(0.55 0.15 150);
   --avatar-3: oklch(0.55 0.18 259);
@@ -84,11 +98,11 @@
 }
 
 .dark {
-  --background: oklch(0.22 0 0);
+  --background: oklch(0.22 0.008 270);
   --foreground: oklch(0.92 0.005 260);
-  --card: oklch(0.26 0 0);
+  --card: oklch(0.18 0.008 270);
   --card-foreground: oklch(0.92 0.005 260);
-  --popover: oklch(0.27 0.005 260);
+  --popover: oklch(0.28 0.008 270);
   --popover-foreground: oklch(0.92 0.005 260);
   --primary: oklch(0.8 0.1 255);
   --primary-foreground: oklch(0.25 0.06 255);
@@ -106,12 +120,20 @@
   --fab: oklch(0.38 0.07 240);
   --fab-foreground: oklch(0.92 0.04 240);
   --selected: oklch(0.33 0.05 255);
-  --chip: oklch(0.32 0.004 260);
+  --chip: oklch(0.4 0.08 262);
+  --pill: oklch(0.84 0.03 275);
+  --pill-foreground: oklch(0.25 0.03 275);
+  --panel: oklch(0.24 0.008 270);
+  --link: oklch(0.78 0.09 270);
+  --nav: oklch(0.25 0.008 270);
+  --badge: oklch(0.8 0.08 20);
+  --badge-foreground: oklch(0.3 0.08 20);
+  --search: oklch(0.3 0.006 270);
 }
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { font-family: var(--font-sans); }
+  html, body { font-family: var(--font-sans); height: 100%; overflow: hidden; overscroll-behavior: none; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
