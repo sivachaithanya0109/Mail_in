@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { MailProvider } from "@/context/MailContext";
 import { Drawer } from "@/components/mail/Drawer";
 import { Compose } from "@/components/mail/Compose";
+import { BottomNav } from "@/components/mail/BottomNav";
 import { Toaster } from "@/components/ui/sonner";
 import { appConfig } from "@/config/appConfig";
 
@@ -131,6 +132,7 @@ function RootComponent() {
         <div className="mx-auto max-w-2xl">
           <Outlet />
         </div>
+        <BottomNav />
         <Drawer />
         <Compose />
         <Toaster position="bottom-center" />

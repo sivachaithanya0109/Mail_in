@@ -38,13 +38,13 @@ export const appConfig: AppConfig = {
   app: {
     name: "Mail",
     tagline: "Your messages, organized",
-    defaultTheme: "light",
+    defaultTheme: "dark",
     showPromotionsTab: true,
     showSocialTab: true,
     enableSecurityDetails: true,
     enableAttachments: true,
     enableLabels: true,
-    dataVersion: 1,
+    dataVersion: 2,
   },
 
   profile: { displayName: me.name, email: me.email, avatarUrl: "", initials: "AM" },
@@ -57,6 +57,19 @@ export const appConfig: AppConfig = {
     securityLink: "View security details",
     demoDisclaimer: "Demo data — not independently verified",
     tabs: { primary: "Primary", promotions: "Promotions", social: "Social" },
+    inboxChip: "Inbox",
+    toMe: "to me",
+    unsubscribe: "Unsubscribe",
+    reply: "Reply",
+    forward: "Forward",
+    securityTitle: "Security details",
+    mailedBy: "Mailed by",
+    signedBy: "Signed by",
+    security: "Security",
+    learnMore: "Learn more",
+    learnMoreInfo: "This message was sent with standard TLS encryption.",
+    chatEmpty: "No conversations yet",
+    meetEmpty: "No meetings scheduled",
   },
 
   folders: [
@@ -79,8 +92,9 @@ export const appConfig: AppConfig = {
   ],
 
   bottomNav: [
-    { label: "Mail", icon: "mail", folder: "inbox" },
-    { label: "Starred", icon: "star", folder: "starred" },
+    { label: "Mail", icon: "mail", path: "/" },
+    { label: "Chat", icon: "chat", path: "/chat" },
+    { label: "Meet", icon: "video", path: "/meet" },
   ],
 
   emails: [
@@ -104,6 +118,8 @@ export const appConfig: AppConfig = {
       important: true,
       attachments: [],
       labels: ["Notifications"],
+      verified: true,
+      unsubscribe: true,
       security: {
         from: "Account Security <no-reply@accounts.example.com>",
         to: me.email,
@@ -114,7 +130,7 @@ export const appConfig: AppConfig = {
         signedBy: "accounts.example.com",
         messageId: "<demo-001@accounts.example.com>",
         authentication: { spf: "PASS (demo)", dkim: "PASS (demo)", dmarc: "PASS (demo)" },
-        transportSecurity: "Standard encryption (TLS) — demo value",
+        transportSecurity: "Standard encryption (TLS).",
         isDemo: true,
       },
     },
@@ -143,7 +159,7 @@ export const appConfig: AppConfig = {
         mailedBy: "studio.example",
         signedBy: "studio.example",
         authentication: { spf: "PASS (demo)", dkim: "PASS (demo)", dmarc: "PASS (demo)" },
-        transportSecurity: "Standard encryption (TLS) — demo value",
+        transportSecurity: "Standard encryption (TLS).",
         isDemo: true,
       },
     },

@@ -1,6 +1,6 @@
 import {
   Inbox, Star, Clock, Send, File, Bookmark, ShieldAlert, Trash2, Mails, Archive,
-  Tag, Mail, Video, Users, Tags, Layers,
+  Tag, Mail, Video, MessageSquare, Users, Tags, Layers,
   type LucideIcon,
 } from "lucide-react";
 
@@ -19,6 +19,7 @@ export const iconRegistry = {
   tag: Tag,
   mail: Mail,
   video: Video,
+  chat: MessageSquare,
   users: Users,
   tags: Tags,
   layers: Layers,

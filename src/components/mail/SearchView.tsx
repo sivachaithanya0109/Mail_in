@@ -14,8 +14,8 @@ export function SearchView() {
   const [q, setQ] = useState("");
   const results = searchEmails(emails, q);
   return (
-    <div className="min-h-dvh bg-background">
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-1 border-b bg-background px-1">
+    <div className="flex h-dvh flex-col bg-background">
+      <header className="z-30 flex h-16 shrink-0 items-center gap-1 border-b bg-background px-1">
         <button aria-label="Back" onClick={() => (window.history.length > 1 ? router.history.back() : navigate({ to: "/" }))} className="grid h-12 w-12 place-items-center rounded-full hover:bg-accent">
           <ArrowLeft className="h-6 w-6" />
         </button>
@@ -26,7 +26,7 @@ export function SearchView() {
       {q && results.length === 0 && (
         <div className="flex flex-col items-center gap-3 py-24 text-muted-foreground"><SearchX className="h-14 w-14 opacity-40" strokeWidth={1} />{appConfig.text.emptySearch}</div>
       )}
-      <ul>
+      <ul className="min-h-0 flex-1 overflow-y-auto">
         {results.map((e) => (
           <li key={e.id}>
             <Link to="/mail/$emailId" params={{ emailId: e.id }} className="flex gap-3 px-4 py-3 active:bg-accent">
