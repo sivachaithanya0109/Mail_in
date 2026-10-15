@@ -1,12 +1,11 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
-  Archive, ArrowLeft, Inbox as InboxIcon, Mail, MailOpen, Menu, Paperclip, Pencil, RefreshCw, Star, Tag, Trash2, Users, Undo2,
+  Archive, ArrowLeft, Inbox as InboxIcon, Mail, MailOpen, Menu, Paperclip, Pencil, Star, Tag, Trash2, Users, Undo2,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { appConfig } from "@/config/appConfig";
 import { useMail } from "@/context/MailContext";
-import { iconRegistry } from "@/lib/icons";
 import { filterByFolder, formatListTime, stripHtml } from "@/lib/mail-helpers";
 import { cn } from "@/lib/utils";
 import type { Category, Email } from "@/types/config";
@@ -19,10 +18,9 @@ export function folderName(id: string) {
 }
 
 export function MailList({ folder }: { folder: string }) {
-  const { emails, tab, setTab, update, move, removeForever, setDrawerOpen, openCompose, reload } = useMail();
+  const { emails, tab, setTab, update, move, removeForever, setDrawerOpen, openCompose } = useMail();
   const [selected, setSelected] = useState<string[]>([]);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
   const list = filterByFolder(emails, folder, tab);
   const isInbox = folder === "inbox";
   const toggle = (id: string) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
@@ -40,16 +38,11 @@ export function MailList({ folder }: { folder: string }) {
     toast(msg.replace("{n}", String(ids.length)));
   };
 
-  const refresh = () => {
-    setRefreshing(true);
-    reload();
-    setTimeout(() => { setRefreshing(false); toast("Up to date"); }, 600);
-  };
 
   return (
-    <div className="flex min-h-dvh flex-col bg-background pb-20">
+    <div className="flex h-[calc(100dvh-4rem)] flex-col bg-background">
       {selected.length > 0 ? (
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-1 bg-background px-2">
+        <header className="z-30 flex h-16 shrink-0 items-center gap-1 bg-background px-2">
           <button aria-label="Clear selection" onClick={() => setSelected([])} className="grid h-12 w-12 place-items-center rounded-full hover:bg-accent">
             <ArrowLeft className="h-6 w-6" />
           </button>
@@ -72,7 +65,7 @@ export function MailList({ folder }: { folder: string }) {
           )}
         </header>
       ) : (
-        <header className="sticky top-0 z-30 bg-background px-3 pb-1 pt-2">
+        <header className="z-30 shrink-0 bg-background px-3 pb-1 pt-2">
           <div className="flex h-12 items-center gap-1 rounded-full bg-search pl-1 pr-1.5">
             <IconBtn label="Open navigation drawer" onClick={() => setDrawerOpen(true)}><Menu /></IconBtn>
             <Link to="/search" className="min-w-0 flex-1 truncate text-base text-muted-foreground">{appConfig.text.searchPlaceholder}</Link>
@@ -83,34 +76,24 @@ export function MailList({ folder }: { folder: string }) {
         </header>
       )}
 
-      {isInbox && tabs.length > 1 && (
-        <div role="tablist" className="flex border-b">
-          {tabs.map((t) => {
-            const count = filterByFolder(emails, "inbox", t.id).filter((e) => e.unread).length;
-            return (
-              <button
-                key={t.id}
-                role="tab"
-                aria-selected={tab === t.id}
-                onClick={() => setTab(t.id)}
-                className={cn("relative flex h-12 flex-1 items-center justify-center gap-1.5 text-sm font-medium",
-                  tab === t.id ? "text-primary" : "text-muted-foreground")}
-              >
-                <t.icon className="h-4 w-4" /> {t.label}
-                {t.id !== "primary" && count > 0 && <span className="rounded-full bg-primary px-1.5 text-[10px] text-primary-foreground">{count}</span>}
-                {tab === t.id && <span className="absolute inset-x-6 bottom-0 h-[3px] rounded-t bg-primary" />}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-24">
+      <p className="px-4 pb-2 pt-4 text-sm text-muted-foreground">{isInbox ? tabs.find((t) => t.id === tab)?.label : folderName(folder)}</p>
 
-      <div className="flex items-center justify-between px-4 pb-1 pt-3">
-        <span className="text-xs font-medium text-muted-foreground">{isInbox ? "" : folderName(folder)}</span>
-        <button aria-label="Refresh" onClick={refresh} className="grid h-9 w-9 place-items-center rounded-full text-muted-foreground hover:bg-accent">
-          <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin")} />
-        </button>
-      </div>
+      {isInbox && tab === "primary" && tabs.slice(1).map((t) => {
+        const cat = filterByFolder(emails, "inbox", t.id);
+        const latest = cat[0];
+        if (!latest) return null;
+        const hasUnread = cat.some((e) => e.unread);
+        return (
+          <button key={t.id} onClick={() => setTab(t.id)} className="mx-2 mb-0.5 flex w-[calc(100%-1rem)] items-center gap-4 rounded-2xl bg-card px-4 py-3 text-left">
+            <t.icon className={cn("h-6 w-6 shrink-0", t.id === "promotions" ? "text-avatar-2" : "text-avatar-3")} />
+            <span className="min-w-0 flex-1">
+              <span className={cn("block truncate", hasUnread && "font-bold")}>{t.label}</span>
+              <span className={cn("block truncate text-sm", hasUnread ? "font-bold" : "text-muted-foreground")}>{latest.sender.name} — {latest.subject}</span>
+            </span>
+          </button>
+        );
+      })}
 
       {folder === "trash" && list.length > 0 && (
         <button
@@ -129,6 +112,7 @@ export function MailList({ folder }: { folder: string }) {
       ) : (
         <ul>{list.map((e) => <Row key={e.id} email={e} selected={selected.includes(e.id)} selecting={selected.length > 0} onToggle={() => toggle(e.id)} />)}</ul>
       )}
+      </div>
 
       <button
         onClick={() => openCompose()}
@@ -137,7 +121,6 @@ export function MailList({ folder }: { folder: string }) {
         <Pencil className="h-5 w-5" /> {appConfig.text.composeLabel}
       </button>
 
-      <BottomNav folder={folder} />
       <ProfileMenu open={profileOpen} onClose={() => setProfileOpen(false)} />
     </div>
   );
@@ -170,7 +153,7 @@ function Row({ email, selected, selecting, onToggle }: { email: Email; selected:
 
   return (
     <li
-      className={cn("flex cursor-pointer gap-3 px-4 select-none", ap.compactEmailList ? "py-2" : "py-3", selected ? "bg-selected" : "active:bg-accent")}
+      className={cn("mx-2 mb-0.5 flex cursor-pointer gap-3 rounded-2xl px-4 select-none", ap.compactEmailList ? "py-2" : "py-3", selected ? "bg-selected" : "bg-card active:bg-accent")}
       onClick={open}
       onPointerDown={() => (pressTimer = setTimeout(onToggle, 500))}
       onPointerUp={() => clearTimeout(pressTimer)}
@@ -215,36 +198,6 @@ function Row({ email, selected, selecting, onToggle }: { email: Email; selected:
         )}
       </div>
     </li>
-  );
-}
-
-function BottomNav({ folder }: { folder: string }) {
-  const { emails } = useMail();
-  const unread = filterByFolder(emails, "inbox", "primary").filter((e) => e.unread).length;
-  return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 flex h-16 border-t bg-popover">
-      {appConfig.bottomNav.map((b) => {
-        const Icon = iconRegistry[b.icon];
-        const active = folder === b.folder;
-        const content = (
-          <>
-            <span className={cn("relative flex h-8 w-16 items-center justify-center rounded-full", active && "bg-secondary")}>
-              <Icon className="h-5 w-5" />
-              {b.folder === "inbox" && unread > 0 && (
-                <span className="absolute -top-1 right-2 rounded-full bg-destructive px-1.5 text-[10px] font-medium text-destructive-foreground">{unread}</span>
-              )}
-            </span>
-            <span className="text-xs font-medium">{b.label}</span>
-          </>
-        );
-        const cls = "flex flex-1 flex-col items-center justify-center gap-1";
-        return b.folder === "inbox" ? (
-          <Link key={b.label} to="/" className={cls}>{content}</Link>
-        ) : (
-          <Link key={b.label} to="/folder/$folderId" params={{ folderId: b.folder }} className={cls}>{content}</Link>
-        );
-      })}
-    </nav>
   );
 }
 
