@@ -24,3 +24,11 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Install on Android
+
+The app is configured as an installable Progressive Web App. After the latest version is live at <https://mail-mirror-lite.lovable.app>, open that address in Chrome on Android, tap **⋮**, then **Install app**. It launches in standalone mode without browser controls.
+
+To package a shareable APK without Android Studio, enter the live HTTPS address at [PWABuilder](https://pwabuilder.com), select **Package for stores** → **Android** → **Other Android**, and download the generated package. Choose a signing key and keep the downloaded key and password safe; future APK updates must use the same key.
+
+For the APK to open as a verified full-screen Trusted Web Activity, publish the `assetlinks.json` provided by the package builder at `public/.well-known/assetlinks.json`, then deploy the site again. Android checks that file against the APK signing certificate; without a matching fingerprint, it falls back to browser controls. The Chrome-installed PWA still opens in standalone mode.
