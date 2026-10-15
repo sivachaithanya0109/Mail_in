@@ -40,7 +40,7 @@ export function MailList({ folder }: { folder: string }) {
 
 
   return (
-    <div className="flex h-[calc(100dvh-4rem)] flex-col bg-background">
+    <div className="flex h-dvh flex-col overflow-hidden bg-background pb-[calc(4rem+env(safe-area-inset-bottom))]">
       {selected.length > 0 ? (
         <header className="z-30 flex h-16 shrink-0 items-center gap-1 bg-background px-2">
           <button aria-label="Clear selection" onClick={() => setSelected([])} className="grid h-12 w-12 place-items-center rounded-full hover:bg-accent">
@@ -65,7 +65,7 @@ export function MailList({ folder }: { folder: string }) {
           )}
         </header>
       ) : (
-        <header className="z-30 shrink-0 bg-background px-3 pb-1 pt-2">
+        <header className="z-30 shrink-0 bg-background px-3 pb-1 pt-[calc(0.5rem+env(safe-area-inset-top))]">
           <div className="flex h-12 items-center gap-1 rounded-full bg-search pl-1 pr-1.5">
             <IconBtn label="Open navigation drawer" onClick={() => setDrawerOpen(true)}><Menu /></IconBtn>
             <Link to="/search" className="min-w-0 flex-1 truncate text-base text-muted-foreground">{appConfig.text.searchPlaceholder}</Link>
@@ -76,7 +76,7 @@ export function MailList({ folder }: { folder: string }) {
         </header>
       )}
 
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-24">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
       <p className="px-4 pb-2 pt-4 text-sm text-muted-foreground">{isInbox ? tabs.find((t) => t.id === tab)?.label : folderName(folder)}</p>
 
       {isInbox && tab === "primary" && tabs.slice(1).map((t) => {
@@ -116,7 +116,7 @@ export function MailList({ folder }: { folder: string }) {
 
       <button
         onClick={() => openCompose()}
-        className="fixed bottom-20 right-4 z-30 flex h-14 items-center gap-3 rounded-2xl bg-fab px-5 font-medium text-fab-foreground shadow-lg transition-transform active:scale-95"
+        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 z-30 flex h-14 items-center gap-3 rounded-2xl bg-fab px-5 font-medium text-fab-foreground shadow-lg transition-transform active:scale-95"
       >
         <Pencil className="h-5 w-5" /> {appConfig.text.composeLabel}
       </button>

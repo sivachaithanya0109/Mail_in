@@ -13,7 +13,7 @@ export function BottomNav() {
   const badge = unread > 99 ? "99+" : String(unread);
   const activePath = path.startsWith("/chat") ? "/chat" : path.startsWith("/meet") ? "/meet" : "/";
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 mx-auto flex h-16 max-w-2xl bg-nav">
+    <nav className="fixed inset-x-0 bottom-0 z-30 mx-auto flex h-[calc(4rem+env(safe-area-inset-bottom))] max-w-2xl bg-nav pb-[env(safe-area-inset-bottom)]">
       {appConfig.bottomNav.map((b) => {
         const Icon = iconRegistry[b.icon];
         const active = activePath === b.path;
