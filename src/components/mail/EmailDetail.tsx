@@ -240,9 +240,9 @@ export function EmailDetail({ id }: { id: string }) {
       </header>
 
       <div className="flex min-h-[4.75rem] shrink-0 items-center gap-2 px-4 py-3 lg:min-h-0 lg:px-10 lg:pb-5 lg:pt-7">
-        <h1 className="flex min-w-0 flex-1 items-center gap-2 text-[1.35rem] leading-snug">
-          <span className="truncate">{email.subject}</span>
-          <span className="shrink-0 rounded bg-chip px-1.5 py-0.5 text-xs text-muted-foreground">
+        <h1 className="min-w-0 flex-1 text-[1.35rem] leading-snug">
+          <span className="break-words">{email.subject}</span>{" "}
+          <span className="inline-block shrink-0 rounded bg-chip px-1.5 py-0.5 align-middle text-xs text-muted-foreground dark:bg-[#3b4b72] dark:text-[#d3e3fd]">
             {email.folder === "inbox"
               ? appConfig.text.inboxChip
               : folderName(email.folder === "archive" ? "all-mail" : email.folder)}
@@ -263,7 +263,7 @@ export function EmailDetail({ id }: { id: string }) {
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3 lg:px-10 lg:overscroll-auto">
-        <section className="rounded-[1.75rem] bg-card px-4 py-4 lg:mx-auto lg:max-w-6xl lg:rounded-none lg:px-0 lg:py-2">
+        <section className="relative rounded-[1.75rem] bg-card px-4 py-4 lg:mx-auto lg:max-w-6xl lg:rounded-none lg:px-0 lg:py-2">
           <div className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-start gap-3">
             <Avatar name={email.sender.name} src={email.sender.avatarUrl} />
             <div className="min-w-0 pt-1">
@@ -310,27 +310,68 @@ export function EmailDetail({ id }: { id: string }) {
           </div>
 
           {expanded && (
-            <div className="mt-4 rounded-2xl bg-panel p-4 text-sm">
-              <div className="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-x-3 gap-y-2">
-                <span className="text-muted-foreground">{appConfig.text.messageFrom}</span>
-                <span className="break-words">{email.sender.email}</span>
-                <span className="text-muted-foreground">{appConfig.text.messageTo}</span>
-                <span className="break-words">
+            <div className="mt-4 rounded-2xl bg-panel p-4 text-sm lg:absolute lg:left-12 lg:top-14 lg:z-40 lg:mt-0 lg:w-[min(32rem,calc(100vw-22rem))] lg:rounded-sm lg:border lg:border-[#dadce0] lg:bg-white lg:p-4 lg:text-sm lg:text-[#202124] lg:shadow-[0_2px_6px_rgba(60,64,67,0.3)]">
+              <div className="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-x-3 gap-y-2 lg:grid-cols-[6.25rem_minmax(0,1fr)] lg:gap-x-3 lg:gap-y-1">
+                <span className="text-muted-foreground lg:whitespace-nowrap lg:text-right lg:text-[#5f6368] lg:after:content-[':']">{appConfig.text.messageFrom}</span>
+                <span className="break-words lg:hidden">{email.sender.email}</span>
+                <span className="hidden break-words lg:block lg:text-[#202124]">
+                  <strong className="font-medium">{email.sender.name}</strong>{" "}
+                  <span className="text-[#5f6368]">&lt;{email.sender.email}&gt;</span>
+                </span>
+                <span className="text-muted-foreground lg:whitespace-nowrap lg:text-right lg:text-[#5f6368] lg:after:content-[':']">{appConfig.text.messageTo}</span>
+                <span className="break-words lg:text-[#202124]">
                   {email.recipients.map((r) => r.email).join(", ")}
                 </span>
-                <span className="text-muted-foreground">{appConfig.text.messageDate}</span>
-                <span className="break-words">{formatFullTime(email.timestamp)}</span>
+                <span className="text-muted-foreground lg:whitespace-nowrap lg:text-right lg:text-[#5f6368] lg:after:content-[':']">{appConfig.text.messageDate}</span>
+                <span className="break-words lg:text-[#202124]">{formatFullTime(email.timestamp)}</span>
+                {email.security?.subject && (
+                  <>
+                    <span className="hidden text-muted-foreground lg:block lg:whitespace-nowrap lg:text-right lg:text-[#5f6368] lg:after:content-[':']">{appConfig.text.messageSubject}</span>
+                    <span className="hidden break-words lg:block lg:text-[#202124]">{email.security.subject}</span>
+                  </>
+                )}
+                {email.security?.mailedBy && (
+                  <>
+                    <span className="hidden text-muted-foreground lg:block lg:whitespace-nowrap lg:text-right lg:text-[#5f6368] lg:after:content-[':']">{appConfig.text.mailedByCompact}</span>
+                    <span className="hidden break-words lg:block lg:text-[#202124]">{email.security.mailedBy}</span>
+                  </>
+                )}
+                {email.security?.signedBy && (
+                  <>
+                    <span className="hidden text-muted-foreground lg:block lg:whitespace-nowrap lg:text-right lg:text-[#5f6368] lg:after:content-[':']">{appConfig.text.signedByCompact}</span>
+                    <span className="hidden break-words lg:block lg:text-[#202124]">{email.security.signedBy}</span>
+                  </>
+                )}
+                {email.security?.transportSecurity && (
+                  <>
+                    <span className="hidden text-muted-foreground lg:block lg:whitespace-nowrap lg:text-right lg:text-[#5f6368] lg:after:content-[':']">{appConfig.text.security.toLowerCase()}</span>
+                    <span className="hidden items-center gap-1.5 lg:flex lg:text-[#202124]">
+                      <Lock className="h-4 w-4 shrink-0 text-[#5f6368]" />
+                      <span>{email.security.transportSecurity || appConfig.text.standardEncryption}</span>
+                      {appConfig.app.enableSecurityDetails && (
+                        <button
+                          onClick={() => window.innerWidth < 1024 && setSecurity(true)}
+                          className="shrink-0 text-link underline"
+                        >
+                          {appConfig.text.learnMore}
+                        </button>
+                      )}
+                    </span>
+                  </>
+                )}
               </div>
               {email.security?.transportSecurity && (
-                <div className="mt-3 pl-[4.25rem]">
-                  <p className="flex items-center gap-3 text-foreground">
-                    <Lock className="h-5 w-5 shrink-0 text-muted-foreground" />
-                    {email.security.transportSecurity || appConfig.text.standardEncryption}
+                <div className="mt-3 grid grid-cols-[3.5rem_minmax(0,1fr)] items-start gap-x-3 lg:hidden">
+                  <Lock className="mt-0.5 h-4 w-4 text-muted-foreground" />
+                  <p className="min-w-0 text-sm leading-5 text-foreground">
+                    <span>
+                      {email.security.transportSecurity || appConfig.text.standardEncryption}
+                    </span>
                   </p>
                   {appConfig.app.enableSecurityDetails && (
                     <button
-                      onClick={() => setSecurity(true)}
-                      className="mt-2 pl-8 font-medium text-link"
+                      onClick={() => window.innerWidth < 1024 && setSecurity(true)}
+                      className="col-start-2 mt-1 text-left text-sm font-medium leading-5 text-link"
                     >
                       {appConfig.text.securityLink}
                     </button>
@@ -352,7 +393,42 @@ export function EmailDetail({ id }: { id: string }) {
                   .replace("{count}", String(email.attachments.length))
                   .replace("{plural}", email.attachments.length > 1 ? "s" : "")}
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="hidden gap-3 lg:grid lg:grid-cols-[repeat(auto-fill,minmax(13rem,13rem))]">
+                {email.attachments.map((a) => (
+                  <button
+                    key={`desktop-${a.name}`}
+                    onClick={() =>
+                      toast(appConfig.text.attachmentPreviewUnavailable.replace("{name}", a.name))
+                    }
+                    className="w-[13rem] overflow-hidden rounded-sm border border-[#dadce0] bg-white text-left text-[#202124] shadow-sm"
+                  >
+                    <div className="grid h-28 place-items-center bg-[#f8f9fa]">
+                      <div className="relative h-[5.5rem] w-[4rem] overflow-hidden border border-[#dadce0] bg-white p-2 shadow-sm">
+                        <div className="absolute right-0 top-0 h-3 w-3 border-b border-l border-[#dadce0] bg-[#f8f9fa]" />
+                        {a.type === "image" ? (
+                          <ImageIcon className="mx-auto mt-4 h-7 w-7 text-[#80868b]" />
+                        ) : (
+                          <div className="space-y-1.5 pt-2">
+                            <div className="h-1 w-7 rounded bg-[#dadce0]" />
+                            <div className="h-1 w-10 rounded bg-[#e8eaed]" />
+                            <div className="h-1 w-8 rounded bg-[#e8eaed]" />
+                            <div className="mt-2 h-3 w-full rounded-sm bg-[#f1f3f4]" />
+                            <div className="h-1 w-9 rounded bg-[#e8eaed]" />
+                            <div className="h-1 w-7 rounded bg-[#e8eaed]" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex h-11 min-w-0 items-center gap-2 border-t border-[#dadce0] px-2">
+                      <span className="grid h-5 min-w-7 shrink-0 place-items-center rounded-sm bg-[#d93025] px-1 text-[9px] font-bold text-white">
+                        {a.name.split(".").pop()?.slice(0, 3).toUpperCase()}
+                      </span>
+                      <span className="truncate text-xs">{a.name}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-3 lg:hidden">
                 {email.attachments.map((a) => (
                   <button
                     key={a.name}
@@ -391,7 +467,7 @@ export function EmailDetail({ id }: { id: string }) {
           <button
             key={b.label}
             onClick={b.run}
-            className="flex h-14 min-w-0 items-center justify-center gap-2 rounded-full bg-reply-action text-base font-medium text-reply-action-foreground hover:bg-reply-action/90 lg:min-w-36 lg:px-6"
+            className="flex h-14 min-w-0 items-center justify-center gap-2 rounded-full bg-reply-action text-base font-medium text-reply-action-foreground hover:bg-reply-action/90 lg:h-11 lg:min-w-32 lg:border lg:border-muted-foreground/60 lg:bg-transparent lg:px-6 lg:text-foreground lg:hover:bg-accent"
           >
             <b.icon className="h-5 w-5 shrink-0" />
             <span className="truncate">{b.label}</span>
@@ -401,7 +477,7 @@ export function EmailDetail({ id }: { id: string }) {
           aria-label={appConfig.text.reactToMessage}
           aria-expanded={reactionsOpen}
           onClick={() => setReactionsOpen((v) => !v)}
-          className="grid h-12 w-12 place-items-center rounded-full bg-reply-action text-reply-action-foreground hover:bg-reply-action/90"
+          className="grid h-12 w-12 place-items-center rounded-full bg-reply-action text-reply-action-foreground hover:bg-reply-action/90 lg:h-11 lg:w-11 lg:border lg:border-muted-foreground/60 lg:bg-transparent lg:text-foreground lg:hover:bg-accent"
         >
           <Smile className="h-6 w-6" />
         </button>
@@ -497,7 +573,11 @@ export function EmailDetail({ id }: { id: string }) {
         </div>
       )}
 
-      {security && <SecuritySheet email={email} onClose={() => setSecurity(false)} />}
+      {security && (
+        <div className="lg:hidden">
+          <SecuritySheet email={email} onClose={() => setSecurity(false)} />
+        </div>
+      )}
     </div>
   );
 }

@@ -153,6 +153,44 @@
   }
 }
 
+@media (min-width: 1024px) {
+  html {
+    scrollbar-color: #b8b8b8 transparent;
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 4px solid transparent;
+    border-radius: 999px;
+    background: #b8b8b8;
+    background-clip: padding-box;
+  }
+
+  .dark {
+    scrollbar-color: #73757a transparent;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #73757a;
+    background-clip: padding-box;
+  }
+}
+
 @utility mail-body {
   line-height: 1.5;
   font-size: 0.95rem;

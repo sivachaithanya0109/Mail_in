@@ -104,6 +104,8 @@ export interface AppConfig {
     searchPlaceholder: string;
     account: string;
     foldersLabel: string;
+    moreFolders: string;
+    fewerFolders: string;
     selectAll: string;
     selectMessage: string;
     draftPrefix: string;
@@ -121,12 +123,15 @@ export interface AppConfig {
     securityTitle: string;
     mailedBy: string;
     signedBy: string;
+    mailedByCompact: string;
+    signedByCompact: string;
     security: string;
     learnMore: string;
     learnMoreInfo: string;
     messageFrom: string;
     messageTo: string;
     messageDate: string;
+    messageSubject: string;
     standardEncryption: string;
     reactToMessage: string;
     reacted: string;

@@ -16,36 +16,36 @@ export function SecuritySheet({ email, onClose }: { email: Email; onClose: () =>
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/55 px-6" onClick={onClose}>
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/55 px-4" onClick={onClose}>
       <section
         role="dialog"
         aria-modal="true"
         aria-labelledby="security-details-title"
         onClick={(event) => event.stopPropagation()}
-        className="w-full max-w-[32rem] rounded-[2rem] bg-security-modal px-6 py-7 text-security-modal-foreground shadow-2xl sm:px-8"
+        className="w-full max-w-[32rem] rounded-[2rem] bg-security-modal px-5 py-6 text-security-modal-foreground shadow-2xl sm:px-8"
       >
-        <h2 id="security-details-title" className="mb-5 text-[1.65rem] font-normal leading-tight">
+        <h2 id="security-details-title" className="mb-4 text-2xl font-normal leading-tight">
           {appConfig.text.securityTitle}
         </h2>
         {security?.mailedBy && (
-          <p className="break-words text-lg leading-7">
+          <p className="break-words text-sm font-normal leading-6">
             {appConfig.text.mailedBy}: {security.mailedBy}
           </p>
         )}
         {security?.signedBy && (
-          <p className="break-words text-lg leading-7">
+          <p className="break-words text-sm font-normal leading-6">
             {appConfig.text.signedBy}: {security.signedBy}
           </p>
         )}
         {security?.transportSecurity && (
-          <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-lg leading-7">
-            <span>{appConfig.text.security}:</span>
-            <Lock aria-hidden="true" className="h-5 w-5 shrink-0" />
-            <span>{security.transportSecurity || appConfig.text.standardEncryption}</span>
+          <p className="mt-1 text-sm font-normal leading-6">
+            <span>{appConfig.text.security}: </span>
+            <Lock aria-hidden="true" className="inline-block h-4 w-4 align-[-2px]" />{" "}
+            <span>{security.transportSecurity || appConfig.text.standardEncryption}</span>{" "}
             <button
               type="button"
               onClick={() => toast(security?.learnMoreInfo ?? appConfig.text.learnMoreInfo)}
-              className="text-link underline underline-offset-2"
+              className="inline whitespace-nowrap text-link underline underline-offset-2"
             >
               {appConfig.text.learnMore}
             </button>

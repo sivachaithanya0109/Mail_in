@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Pencil } from "lucide-react";
+import { ChevronDown, ChevronUp, Pencil } from "lucide-react";
+import { useState } from "react";
 import { appConfig } from "@/config/appConfig";
 import { useMail } from "@/context/MailContext";
 import { filterByFolder } from "@/lib/mail-helpers";
@@ -7,12 +8,17 @@ import { iconRegistry } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 export function DesktopSidebar() {
+  const [showMore, setShowMore] = useState(true);
   const { emails, tab, openCompose } = useMail();
   const path = useRouterState({ select: (state) => state.location.pathname });
   const current = path === "/" ? "inbox" : path.startsWith("/folder/") ? decodeURIComponent(path.slice(8)) : "";
 
   const unreadCount = (id: string) =>
     filterByFolder(emails, id, id === "inbox" ? "primary" : tab).filter((email) => email.unread).length;
+
+  const primaryFolders = ["inbox", "starred", "snoozed", "sent", "drafts"];
+  const visibleFolders = appConfig.folders.filter((folder) => primaryFolders.includes(folder.id));
+  const moreFolders = appConfig.folders.filter((folder) => !primaryFolders.includes(folder.id));
 
   const folderLink = (id: string, name: string, iconName: keyof typeof iconRegistry) => {
     const Icon = iconRegistry[iconName];
@@ -49,12 +55,24 @@ export function DesktopSidebar() {
         </button>
       </div>
       <nav aria-label={appConfig.text.foldersLabel} className="min-h-0 flex-1 overflow-y-auto pr-2">
-        {appConfig.folders.map((folder) =>
+        {visibleFolders.map((folder) =>
           folderLink(
             folder.id,
             folder.id === "inbox" ? appConfig.text.inboxChip : folder.name,
             folder.icon,
           ),
+        )}
+        <button
+          type="button"
+          aria-expanded={showMore}
+          onClick={() => setShowMore((value) => !value)}
+          className="mx-2 flex h-10 w-[calc(100%-1rem)] items-center gap-4 rounded-r-full px-4 text-sm text-foreground hover:bg-accent"
+        >
+          {showMore ? <ChevronUp className="h-5 w-5 shrink-0" /> : <ChevronDown className="h-5 w-5 shrink-0" />}
+          {showMore ? appConfig.text.fewerFolders : appConfig.text.moreFolders}
+        </button>
+        {showMore && moreFolders.map((folder) =>
+          folderLink(folder.id, folder.name, folder.icon),
         )}
         {appConfig.app.enableLabels && appConfig.labels.length > 0 && (
           <div className="mt-5 border-t border-border/60 px-2 pt-3">
