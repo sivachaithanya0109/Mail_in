@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Search } from "lucide-react";
 import { useState } from "react";
 import { appConfig } from "@/config/appConfig";
+import { Search } from "@/lib/icons";
 import { Avatar } from "./Avatar";
 import { Logo } from "./Logo";
 import { ProfileMenu } from "./ProfileMenu";

@@ -21,7 +21,7 @@ export function Drawer() {
   const unread = (id: string) =>
     filterByFolder(emails, id, id === "inbox" ? "primary" : tab).filter((e) => e.unread).length;
 
-  const item = (id: string, name: string, Icon: React.ComponentType<{ className?: string }>) => {
+  const item = (id: string, name: string, Icon: React.ComponentType<{ className?: string | undefined }>) => {
     const count = unread(id);
     const active = current === id;
     const inner = (

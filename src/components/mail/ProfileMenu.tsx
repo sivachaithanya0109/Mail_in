@@ -1,4 +1,4 @@
-import { Moon, RotateCcw, Sun, X } from "lucide-react";
+import { Moon, RotateCcw, Sun, X } from "@/lib/icons";
 import { toast } from "sonner";
 import { appConfig } from "@/config/appConfig";
 import { useMail } from "@/context/MailContext";

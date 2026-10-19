@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, SearchX, X } from "lucide-react";
+import { ArrowLeft, SearchX, X } from "@/lib/icons";
 import { useState } from "react";
 import { appConfig } from "@/config/appConfig";
 import { useMail } from "@/context/MailContext";
@@ -24,7 +24,7 @@ export function SearchView() {
         {q && <button aria-label="Clear search" onClick={() => setQ("")} className="grid h-12 w-12 place-items-center rounded-full hover:bg-accent"><X className="h-5 w-5" /></button>}
       </header>
       {q && results.length === 0 && (
-        <div className="flex flex-col items-center gap-3 py-24 text-muted-foreground"><SearchX className="h-14 w-14 opacity-40" strokeWidth={1} />{appConfig.text.emptySearch}</div>
+        <div className="flex flex-col items-center gap-3 py-24 text-muted-foreground"><SearchX className="h-14 w-14 opacity-40" />{appConfig.text.emptySearch}</div>
       )}
       <ul className="min-h-0 flex-1 overflow-y-auto">
         {results.map((e) => (

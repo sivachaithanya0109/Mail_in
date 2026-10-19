@@ -1,4 +1,4 @@
-import { ArrowLeft, ChevronDown, ChevronUp, Paperclip, Send, Trash2, X } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, Paperclip, Send, Trash2, X } from "@/lib/icons";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { appConfig } from "@/config/appConfig";

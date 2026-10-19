@@ -1,10 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ChevronDown, ChevronUp, Pencil } from "lucide-react";
 import { useState } from "react";
 import { appConfig } from "@/config/appConfig";
 import { useMail } from "@/context/MailContext";
 import { filterByFolder } from "@/lib/mail-helpers";
-import { iconRegistry } from "@/lib/icons";
+import { ChevronDown, ChevronUp, Pencil, iconRegistry } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 export function DesktopSidebar() {

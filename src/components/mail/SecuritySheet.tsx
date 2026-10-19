@@ -1,4 +1,4 @@
-import { Lock } from "lucide-react";
+import { Lock } from "@/lib/icons";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { appConfig } from "@/config/appConfig";

@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check } from "@/lib/icons";
 import { avatarClass, initials } from "@/lib/mail-helpers";
 import { cn } from "@/lib/utils";
 

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
-  Archive, ArrowLeft, Inbox as InboxIcon, Mail, MailOpen, Paperclip, Pencil, Star, Tag, Trash2, Users, Undo2,
-} from "lucide-react";
+  Archive, ArrowLeft, Inbox as InboxIcon, Mail, MailOpen, Menu, Paperclip, Pencil, Star, Tag, Trash2, Users, Undo2,
+} from "@/lib/icons";
 import { useState } from "react";
 import { toast } from "sonner";
 import { appConfig } from "@/config/appConfig";
@@ -10,7 +10,6 @@ import { filterByFolder, formatListTime, stripHtml } from "@/lib/mail-helpers";
 import { cn } from "@/lib/utils";
 import type { Category, Email } from "@/types/config";
 import { Avatar } from "./Avatar";
-import { GmailIcon } from "./GmailIcon";
 import { ProfileMenu } from "./ProfileMenu";
 
 export function folderName(id: string) {
@@ -69,7 +68,7 @@ export function MailList({ folder }: { folder: string }) {
         <header className="z-30 shrink-0 bg-background px-3 pb-1 pt-[calc(0.5rem+env(safe-area-inset-top))] lg:hidden">
           <div className="flex h-14 items-center gap-2">
             <IconBtn label="Open navigation drawer" onClick={() => setDrawerOpen(true)} className="h-10 w-10 rounded-xl">
-              <GmailIcon name="menu" className="h-7 w-7" />
+              <Menu className="h-7 w-7" />
             </IconBtn>
             <Link
               to="/search"
@@ -164,7 +163,7 @@ export function MailList({ folder }: { folder: string }) {
 
       {list.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 px-8 py-20 text-center text-muted-foreground">
-          <InboxIcon className="h-16 w-16 opacity-40" strokeWidth={1} />
+          <InboxIcon className="h-16 w-16 opacity-40" />
           <p>{appConfig.text.emptyFolder}</p>
         </div>
       ) : (

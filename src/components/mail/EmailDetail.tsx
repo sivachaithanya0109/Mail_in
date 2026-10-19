@@ -22,7 +22,7 @@ import {
   Tag,
   Trash2,
   Undo2,
-} from "lucide-react";
+} from "@/lib/icons";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { appConfig } from "@/config/appConfig";
