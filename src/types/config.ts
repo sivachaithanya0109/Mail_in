@@ -102,6 +102,11 @@ export interface AppConfig {
   profile: { displayName: string; email: string; avatarUrl: string; initials: string };
   text: {
     searchPlaceholder: string;
+    account: string;
+    foldersLabel: string;
+    selectAll: string;
+    selectMessage: string;
+    draftPrefix: string;
     composeLabel: string;
     emptyFolder: string;
     emptySearch: string;

@@ -194,8 +194,8 @@ export function EmailDetail({ id }: { id: string }) {
   ];
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-background pb-[calc(4rem+env(safe-area-inset-bottom))]">
-      <header className="z-30 flex h-[calc(3.5rem+env(safe-area-inset-top))] shrink-0 items-center bg-background px-1 pt-[env(safe-area-inset-top)]">
+    <div className="flex h-dvh flex-col overflow-hidden bg-background pb-[calc(4rem+env(safe-area-inset-bottom))] lg:h-full lg:rounded-3xl lg:bg-card lg:pb-0">
+      <header className="z-30 flex h-[calc(3.5rem+env(safe-area-inset-top))] shrink-0 items-center bg-background px-1 pt-[env(safe-area-inset-top)] lg:h-14 lg:px-4 lg:pt-0">
         <IconBtn label={appConfig.text.back} onClick={back}>
           <ArrowLeft />
         </IconBtn>
@@ -239,7 +239,7 @@ export function EmailDetail({ id }: { id: string }) {
         </IconBtn>
       </header>
 
-      <div className="flex min-h-[4.75rem] shrink-0 items-center gap-2 px-4 py-3">
+      <div className="flex min-h-[4.75rem] shrink-0 items-center gap-2 px-4 py-3 lg:min-h-0 lg:px-10 lg:pb-5 lg:pt-7">
         <h1 className="flex min-w-0 flex-1 items-center gap-2 text-[1.35rem] leading-snug">
           <span className="truncate">{email.subject}</span>
           <span className="shrink-0 rounded bg-chip px-1.5 py-0.5 text-xs text-muted-foreground">
@@ -262,8 +262,8 @@ export function EmailDetail({ id }: { id: string }) {
         </button>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3">
-        <section className="rounded-[1.75rem] bg-card px-4 py-4">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3 lg:px-10 lg:overscroll-auto">
+        <section className="rounded-[1.75rem] bg-card px-4 py-4 lg:mx-auto lg:max-w-6xl lg:rounded-none lg:px-0 lg:py-2">
           <div className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-start gap-3">
             <Avatar name={email.sender.name} src={email.sender.avatarUrl} />
             <div className="min-w-0 pt-1">
@@ -383,7 +383,7 @@ export function EmailDetail({ id }: { id: string }) {
         </section>
       </div>
 
-      <div className="relative z-20 grid shrink-0 grid-cols-[1fr_1fr_auto] items-center gap-2 px-4 pb-3 pt-2">
+      <div className="relative z-20 grid shrink-0 grid-cols-[1fr_1fr_auto] items-center gap-2 px-4 pb-3 pt-2 lg:mx-10 lg:grid-cols-[auto_auto_1fr] lg:justify-start lg:border-t lg:border-border/70 lg:bg-card lg:px-0 lg:pb-4 lg:pt-4">
         {[
           { label: appConfig.text.reply, icon: Reply, run: reply },
           { label: appConfig.text.forward, icon: Forward, run: forward },
@@ -391,7 +391,7 @@ export function EmailDetail({ id }: { id: string }) {
           <button
             key={b.label}
             onClick={b.run}
-            className="flex h-14 min-w-0 items-center justify-center gap-2 rounded-full bg-reply-action text-base font-medium text-reply-action-foreground hover:bg-reply-action/90"
+            className="flex h-14 min-w-0 items-center justify-center gap-2 rounded-full bg-reply-action text-base font-medium text-reply-action-foreground hover:bg-reply-action/90 lg:min-w-36 lg:px-6"
           >
             <b.icon className="h-5 w-5 shrink-0" />
             <span className="truncate">{b.label}</span>
@@ -431,13 +431,13 @@ export function EmailDetail({ id }: { id: string }) {
 
       {menu && (
         <div
-          className="fixed inset-0 z-50 flex items-end bg-foreground/40"
+          className="fixed inset-0 z-50 flex items-end bg-foreground/40 lg:items-start lg:justify-end lg:bg-transparent"
           onClick={() => setMenu(false)}
         >
           <div
             role="menu"
             onClick={(e) => e.stopPropagation()}
-            className="w-full rounded-t-3xl bg-popover py-3 pb-6 animate-in slide-in-from-bottom"
+            className="w-full rounded-t-3xl bg-popover py-3 pb-6 animate-in slide-in-from-bottom lg:mr-8 lg:mt-16 lg:w-80 lg:rounded-2xl lg:pb-3 lg:shadow-xl"
           >
             <div className="mx-auto mb-2 h-1 w-8 rounded-full bg-muted-foreground/40" />
             {menuItems.map((m) => (
@@ -456,12 +456,12 @@ export function EmailDetail({ id }: { id: string }) {
 
       {labelsOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-end bg-foreground/40"
+          className="fixed inset-0 z-50 flex items-end bg-foreground/40 lg:items-center lg:justify-center"
           onClick={() => setLabelsOpen(false)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full rounded-t-3xl bg-popover p-5 pb-8"
+            className="w-full rounded-t-3xl bg-popover p-5 pb-8 lg:max-w-md lg:rounded-3xl lg:shadow-xl"
           >
             <h2 className="mb-3 text-lg font-medium">{appConfig.text.labelsTitle}</h2>
             {appConfig.labels.map((l) => {

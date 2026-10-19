@@ -49,12 +49,13 @@ export function Drawer() {
       <div
         aria-hidden
         onClick={() => setDrawerOpen(false)}
-        className={cn("fixed inset-0 z-40 bg-foreground/40 transition-opacity", drawerOpen ? "opacity-100" : "pointer-events-none opacity-0")}
+        className={cn("fixed inset-0 z-40 bg-foreground/40 transition-opacity lg:hidden", drawerOpen ? "opacity-100" : "pointer-events-none opacity-0")}
       />
       <nav
         aria-label="Folders"
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex w-[85%] max-w-80 flex-col overflow-y-auto rounded-r-2xl bg-popover pb-6 transition-transform duration-200",
+          "lg:hidden",
           drawerOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >

@@ -14,8 +14,8 @@ export function SearchView() {
   const [q, setQ] = useState("");
   const results = searchEmails(emails, q);
   return (
-    <div className="flex h-dvh flex-col bg-background">
-      <header className="z-30 flex h-16 shrink-0 items-center gap-1 border-b bg-background px-1">
+    <div className="flex h-dvh flex-col bg-background lg:h-full lg:rounded-3xl lg:bg-card">
+      <header className="z-30 flex h-16 shrink-0 items-center gap-1 border-b bg-background px-1 lg:h-14 lg:px-4">
         <button aria-label="Back" onClick={() => (window.history.length > 1 ? router.history.back() : navigate({ to: "/" }))} className="grid h-12 w-12 place-items-center rounded-full hover:bg-accent">
           <ArrowLeft className="h-6 w-6" />
         </button>

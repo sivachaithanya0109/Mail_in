@@ -18,6 +18,8 @@ import { Compose } from "@/components/mail/Compose";
 import { BottomNav } from "@/components/mail/BottomNav";
 import { Toaster } from "@/components/ui/sonner";
 import { appConfig } from "@/config/appConfig";
+import { DesktopHeader } from "@/components/mail/DesktopHeader";
+import { DesktopSidebar } from "@/components/mail/DesktopSidebar";
 
 function NotFoundComponent() {
   return (
@@ -141,8 +143,14 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <MailProvider>
-        <div className="mx-auto max-w-2xl">
-          <Outlet />
+        <div className="mx-auto max-w-2xl lg:flex lg:h-dvh lg:max-w-none lg:flex-col lg:overflow-hidden">
+          <DesktopHeader />
+          <div className="flex min-h-0 flex-1">
+            <DesktopSidebar />
+            <main className="min-h-0 min-w-0 flex-1 lg:overflow-hidden lg:p-3 lg:pl-1">
+              <Outlet />
+            </main>
+          </div>
         </div>
         <BottomNav />
         <Drawer />

@@ -40,9 +40,9 @@ export function MailList({ folder }: { folder: string }) {
 
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-background pb-[calc(4rem+env(safe-area-inset-bottom))]">
+    <div className="flex h-dvh flex-col overflow-hidden bg-background pb-[calc(4rem+env(safe-area-inset-bottom))] lg:h-full lg:rounded-3xl lg:bg-card lg:pb-0">
       {selected.length > 0 ? (
-        <header className="z-30 flex h-16 shrink-0 items-center gap-1 bg-background px-2">
+        <header className="z-30 flex h-16 shrink-0 items-center gap-1 bg-background px-2 lg:h-14 lg:px-4">
           <button aria-label="Clear selection" onClick={() => setSelected([])} className="grid h-12 w-12 place-items-center rounded-full hover:bg-accent">
             <ArrowLeft className="h-6 w-6" />
           </button>
@@ -65,7 +65,7 @@ export function MailList({ folder }: { folder: string }) {
           )}
         </header>
       ) : (
-        <header className="z-30 shrink-0 bg-background px-3 pb-1 pt-[calc(0.5rem+env(safe-area-inset-top))]">
+        <header className="z-30 shrink-0 bg-background px-3 pb-1 pt-[calc(0.5rem+env(safe-area-inset-top))] lg:hidden">
           <div className="flex h-12 items-center gap-1 rounded-full bg-search pl-1 pr-1.5">
             <IconBtn label="Open navigation drawer" onClick={() => setDrawerOpen(true)}><Menu /></IconBtn>
             <Link to="/search" className="min-w-0 flex-1 truncate text-base text-muted-foreground">{appConfig.text.searchPlaceholder}</Link>
@@ -76,8 +76,46 @@ export function MailList({ folder }: { folder: string }) {
         </header>
       )}
 
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-      <p className="px-4 pb-2 pt-4 text-sm text-muted-foreground">{isInbox ? tabs.find((t) => t.id === tab)?.label : folderName(folder)}</p>
+      {selected.length === 0 && (
+        <div className="hidden h-14 shrink-0 items-center gap-4 border-b border-border/70 px-5 lg:flex">
+          <input
+            type="checkbox"
+            aria-label={appConfig.text.selectAll}
+            checked={list.length > 0 && selected.length === list.length}
+            onChange={(event) => setSelected(event.target.checked ? list.map((email) => email.id) : [])}
+            className="h-4 w-4 accent-primary"
+          />
+          <h1 className="min-w-0 flex-1 truncate text-lg font-normal">
+            {isInbox ? tabs.find((item) => item.id === tab)?.label : folderName(folder)}
+          </h1>
+          <span className="text-sm text-muted-foreground">{list.length}</span>
+        </div>
+      )}
+
+      {isInbox && (
+        <nav aria-label={appConfig.text.tabs.primary} className="hidden h-[3.5rem] shrink-0 border-b border-border/70 px-4 lg:flex">
+          {tabs.map((item) => {
+            const active = tab === item.id;
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setTab(item.id)}
+                className={cn(
+                  "flex min-w-40 items-center justify-center gap-3 border-b-[3px] px-4 text-sm font-medium transition-colors",
+                  active ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:bg-accent",
+                )}
+              >
+                <Icon className="h-5 w-5" />
+                {item.label}
+              </button>
+            );
+          })}
+        </nav>
+      )}
+
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain lg:overscroll-auto">
+      <p className="px-4 pb-2 pt-4 text-sm text-muted-foreground lg:hidden">{isInbox ? tabs.find((t) => t.id === tab)?.label : folderName(folder)}</p>
 
       {isInbox && tab === "primary" && tabs.slice(1).map((t) => {
         const cat = filterByFolder(emails, "inbox", t.id);
@@ -85,7 +123,7 @@ export function MailList({ folder }: { folder: string }) {
         if (!latest) return null;
         const hasUnread = cat.some((e) => e.unread);
         return (
-          <button key={t.id} onClick={() => setTab(t.id)} className="mx-2 mb-0.5 flex w-[calc(100%-1rem)] items-center gap-4 rounded-2xl bg-card px-4 py-3 text-left">
+          <button key={t.id} onClick={() => setTab(t.id)} className="mx-2 mb-0.5 flex w-[calc(100%-1rem)] items-center gap-4 rounded-2xl bg-card px-4 py-3 text-left lg:hidden">
             <t.icon className={cn("h-6 w-6 shrink-0", t.id === "promotions" ? "text-avatar-2" : "text-avatar-3")} />
             <span className="min-w-0 flex-1">
               <span className={cn("block truncate", hasUnread && "font-bold")}>{t.label}</span>
@@ -116,7 +154,7 @@ export function MailList({ folder }: { folder: string }) {
 
       <button
         onClick={() => openCompose()}
-        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 z-30 flex h-14 items-center gap-3 rounded-2xl bg-fab px-5 font-medium text-fab-foreground shadow-lg transition-transform active:scale-95"
+        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 z-30 flex h-14 items-center gap-3 rounded-2xl bg-fab px-5 font-medium text-fab-foreground shadow-lg transition-transform active:scale-95 lg:hidden"
       >
         <Pencil className="h-5 w-5" /> {appConfig.text.composeLabel}
       </button>
@@ -152,52 +190,91 @@ function Row({ email, selected, selecting, onToggle }: { email: Email; selected:
   };
 
   return (
-    <li
-      className={cn("mx-2 mb-0.5 flex cursor-pointer gap-3 rounded-2xl px-4 select-none", ap.compactEmailList ? "py-2" : "py-3", selected ? "bg-selected" : "bg-card active:bg-accent")}
-      onClick={open}
-      onPointerDown={() => (pressTimer = setTimeout(onToggle, 500))}
-      onPointerUp={() => clearTimeout(pressTimer)}
-      onPointerLeave={() => clearTimeout(pressTimer)}
-      onContextMenu={(e) => e.preventDefault()}
-    >
-      {ap.showSenderAvatars && (
-        <button aria-label={selected ? "Deselect" : "Select"} onClick={(e) => { e.stopPropagation(); onToggle(); }} className="h-10 shrink-0 rounded-full">
-          <Avatar name={email.sender.name} src={email.sender.avatarUrl} selected={selected} />
-        </button>
-      )}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-baseline gap-2">
-          <span className={cn("min-w-0 flex-1 truncate", email.unread ? "font-bold" : "")}>
-            {isDraft ? <span className="text-destructive">Draft </span> : null}{who}
-          </span>
-          {ap.showTimestamps && <span className={cn("shrink-0 text-xs", email.unread ? "font-bold" : "text-muted-foreground")}>{formatListTime(email.timestamp)}</span>}
-        </div>
-        <div className="flex items-start gap-2">
-          <div className="min-w-0 flex-1">
-            <p className={cn("truncate text-sm", email.unread ? "font-bold" : "")}>{email.subject}</p>
-            <p className="truncate text-sm text-muted-foreground">{email.preview || stripHtml(email.body)}</p>
-          </div>
-          <button
-            aria-label={email.starred ? "Unstar" : "Star"}
-            onClick={(e) => { e.stopPropagation(); update([email.id], { starred: !email.starred }); }}
-            onPointerDown={(e) => e.stopPropagation()}
-            className="-mr-2 grid h-9 w-9 shrink-0 place-items-center rounded-full"
-          >
-            <Star className={cn("h-5 w-5", email.starred ? "fill-star text-star" : "text-muted-foreground")} />
+    <>
+      <li
+        className={cn("mx-2 mb-0.5 flex cursor-pointer gap-3 rounded-2xl px-4 select-none lg:hidden", ap.compactEmailList ? "py-2" : "py-3", selected ? "bg-selected" : "bg-card active:bg-accent")}
+        onClick={open}
+        onPointerDown={() => (pressTimer = setTimeout(onToggle, 500))}
+        onPointerUp={() => clearTimeout(pressTimer)}
+        onPointerLeave={() => clearTimeout(pressTimer)}
+        onContextMenu={(e) => e.preventDefault()}
+      >
+        {ap.showSenderAvatars && (
+          <button aria-label={selected ? "Deselect" : "Select"} onClick={(e) => { e.stopPropagation(); onToggle(); }} className="h-10 shrink-0 rounded-full">
+            <Avatar name={email.sender.name} src={email.sender.avatarUrl} selected={selected} />
           </button>
-        </div>
-        {appConfig.app.enableAttachments && email.attachments.length > 0 && (
-          <div className="mt-1.5 flex gap-2 overflow-hidden">
-            {email.attachments.slice(0, 2).map((a) => (
-              <span key={a.name} className="flex min-w-0 max-w-[48%] items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs">
-                <Paperclip className="h-3.5 w-3.5 shrink-0 text-destructive" /><span className="truncate">{a.name}</span>
-              </span>
-            ))}
-            {email.attachments.length > 2 && <span className="rounded-full border px-2 py-1 text-xs">+{email.attachments.length - 2}</span>}
-          </div>
         )}
-      </div>
-    </li>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline gap-2">
+            <span className={cn("min-w-0 flex-1 truncate", email.unread ? "font-bold" : "")}>
+              {isDraft ? <span className="text-destructive">Draft </span> : null}{who}
+            </span>
+            {ap.showTimestamps && <span className={cn("shrink-0 text-xs", email.unread ? "font-bold" : "text-muted-foreground")}>{formatListTime(email.timestamp)}</span>}
+          </div>
+          <div className="flex items-start gap-2">
+            <div className="min-w-0 flex-1">
+              <p className={cn("truncate text-sm", email.unread ? "font-bold" : "")}>{email.subject}</p>
+              <p className="truncate text-sm text-muted-foreground">{email.preview || stripHtml(email.body)}</p>
+            </div>
+            <button
+              aria-label={email.starred ? appConfig.text.unstar : appConfig.text.star}
+              onClick={(e) => { e.stopPropagation(); update([email.id], { starred: !email.starred }); }}
+              onPointerDown={(e) => e.stopPropagation()}
+              className="-mr-2 grid h-9 w-9 shrink-0 place-items-center rounded-full"
+            >
+              <Star className={cn("h-5 w-5", email.starred ? "fill-star text-star" : "text-muted-foreground")} />
+            </button>
+          </div>
+          {appConfig.app.enableAttachments && email.attachments.length > 0 && (
+            <div className="mt-1.5 flex gap-2 overflow-hidden">
+              {email.attachments.slice(0, 2).map((a) => (
+                <span key={a.name} className="flex min-w-0 max-w-[48%] items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs">
+                  <Paperclip className="h-3.5 w-3.5 shrink-0 text-destructive" /><span className="truncate">{a.name}</span>
+                </span>
+              ))}
+              {email.attachments.length > 2 && <span className="rounded-full border px-2 py-1 text-xs">+{email.attachments.length - 2}</span>}
+            </div>
+          )}
+        </div>
+      </li>
+
+      <li
+        onClick={open}
+        className={cn(
+          "hidden min-h-[2.85rem] cursor-pointer grid-cols-[40px_40px_minmax(10rem,15rem)_minmax(0,1fr)_6rem] items-center gap-1 border-b border-border/60 px-4 text-sm hover:shadow-sm lg:grid",
+          selected ? "bg-selected" : email.unread ? "bg-primary/5" : "bg-card",
+        )}
+      >
+        <input
+          type="checkbox"
+          aria-label={appConfig.text.selectMessage}
+          checked={selected}
+          onClick={(event) => event.stopPropagation()}
+          onChange={onToggle}
+          className="ml-2 h-4 w-4 accent-primary"
+        />
+        <button
+          aria-label={email.starred ? appConfig.text.unstar : appConfig.text.star}
+          onClick={(event) => {
+            event.stopPropagation();
+            update([email.id], { starred: !email.starred });
+          }}
+          className="grid h-9 w-9 place-items-center rounded-full hover:bg-accent"
+        >
+          <Star className={cn("h-5 w-5", email.starred ? "fill-star text-star" : "text-muted-foreground")} />
+        </button>
+        <span className={cn("truncate pr-3", email.unread && "font-bold")}>{isDraft ? appConfig.text.draftPrefix : who}</span>
+        <span className="flex min-w-0 items-center gap-2 overflow-hidden">
+          {email.folder === "inbox" && (
+            <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">{appConfig.text.inboxChip}</span>
+          )}
+          <span className={cn("shrink-0 truncate", email.unread && "font-bold")}>{email.subject}</span>
+          <span className="min-w-0 truncate text-muted-foreground">— {email.preview || stripHtml(email.body)}</span>
+          {appConfig.app.enableAttachments && email.attachments.length > 0 && <Paperclip className="h-4 w-4 shrink-0 text-muted-foreground" />}
+        </span>
+        <time className={cn("text-right text-xs", email.unread ? "font-bold" : "text-muted-foreground")}>{formatListTime(email.timestamp)}</time>
+      </li>
+    </>
   );
 }
 

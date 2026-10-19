@@ -51,6 +51,11 @@ export const appConfig: AppConfig = {
 
   text: {
     searchPlaceholder: "Search in mail",
+    account: "Account",
+    foldersLabel: "Folders",
+    selectAll: "Select all messages",
+    selectMessage: "Select message",
+    draftPrefix: "Draft",
     composeLabel: "Compose",
     emptyFolder: "Nothing in this folder",
     emptySearch: "No results found",
