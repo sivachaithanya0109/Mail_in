@@ -21,17 +21,59 @@ export function formatListTime(iso: string) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
   const now = new Date();
-  if (d.toDateString() === now.toDateString())
-    return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-  if (d.getFullYear() === now.getFullYear())
-    return d.toLocaleDateString([], { day: "numeric", month: "short" });
-  return d.toLocaleDateString([], { day: "numeric", month: "numeric", year: "2-digit" });
+  const locale = "en-US";
+  const timeZone = "Asia/Kolkata";
+  const dateParts = (date: Date): { year: string; month: string; day: string } => {
+    const parts = new Intl.DateTimeFormat(locale, {
+        timeZone,
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      })
+      .formatToParts(date);
+    return {
+      year: parts.find(({ type }) => type === "year")?.value ?? "",
+      month: parts.find(({ type }) => type === "month")?.value ?? "",
+      day: parts.find(({ type }) => type === "day")?.value ?? "",
+    };
+  };
+  const messageDate = dateParts(d);
+  const currentDate = dateParts(now);
+  if (
+    messageDate.year === currentDate.year &&
+    messageDate.month === currentDate.month &&
+    messageDate.day === currentDate.day
+  )
+    return new Intl.DateTimeFormat(locale, {
+      timeZone,
+      hour: "numeric",
+      minute: "2-digit",
+    }).format(d);
+  if (messageDate.year === currentDate.year)
+    return new Intl.DateTimeFormat(locale, {
+      timeZone,
+      day: "numeric",
+      month: "short",
+    }).format(d);
+  return new Intl.DateTimeFormat(locale, {
+    timeZone,
+    day: "numeric",
+    month: "numeric",
+    year: "2-digit",
+  }).format(d);
 }
 
 export function formatFullTime(iso: string) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleString([], { day: "numeric", month: "short", year: "numeric", hour: "numeric", minute: "2-digit" });
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(d);
 }
 
 export function initials(name: string) {

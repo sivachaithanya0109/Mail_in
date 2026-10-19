@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
-  Archive, ArrowLeft, Inbox as InboxIcon, Mail, MailOpen, Menu, Paperclip, Pencil, Star, Tag, Trash2, Users, Undo2,
+  Archive, ArrowLeft, Inbox as InboxIcon, Mail, MailOpen, Paperclip, Pencil, Star, Tag, Trash2, Users, Undo2,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import { filterByFolder, formatListTime, stripHtml } from "@/lib/mail-helpers";
 import { cn } from "@/lib/utils";
 import type { Category, Email } from "@/types/config";
 import { Avatar } from "./Avatar";
+import { GmailIcon } from "./GmailIcon";
 import { ProfileMenu } from "./ProfileMenu";
 
 export function folderName(id: string) {
@@ -66,11 +67,30 @@ export function MailList({ folder }: { folder: string }) {
         </header>
       ) : (
         <header className="z-30 shrink-0 bg-background px-3 pb-1 pt-[calc(0.5rem+env(safe-area-inset-top))] lg:hidden">
-          <div className="flex h-12 items-center gap-1 rounded-full bg-search pl-1 pr-1.5">
-            <IconBtn label="Open navigation drawer" onClick={() => setDrawerOpen(true)}><Menu /></IconBtn>
-            <Link to="/search" className="min-w-0 flex-1 truncate text-base text-muted-foreground">{appConfig.text.searchPlaceholder}</Link>
-            <button aria-label="Account" onClick={() => setProfileOpen(true)} className="rounded-full">
-              <Avatar name={appConfig.profile.displayName} src={appConfig.profile.avatarUrl || undefined} label={appConfig.profile.initials} size={32} />
+          <div className="flex h-14 items-center gap-2">
+            <IconBtn label="Open navigation drawer" onClick={() => setDrawerOpen(true)} className="h-10 w-10 rounded-xl">
+              <GmailIcon name="menu" className="h-7 w-7" />
+            </IconBtn>
+            <Link
+              to="/search"
+              className="flex h-12 min-w-0 flex-1 items-center justify-center truncate rounded-full bg-search px-4 text-base text-muted-foreground"
+            >
+              <span className="truncate">{appConfig.text.searchPlaceholder}</span>
+            </Link>
+            <button
+              aria-label={appConfig.text.account}
+              onClick={() => setProfileOpen(true)}
+              className="shrink-0 rounded-full"
+            >
+              <span className="block rounded-full p-0.5">
+                {appConfig.profile.avatarUrl ? (
+                  <Avatar name={appConfig.profile.displayName} src={appConfig.profile.avatarUrl} size={38} />
+                ) : (
+                  <span className="grid h-[38px] w-[38px] place-items-center rounded-full bg-[#009688] text-lg font-medium text-white">
+                    {appConfig.profile.initials.slice(0, 1)}
+                  </span>
+                )}
+              </span>
             </button>
           </div>
         </header>
