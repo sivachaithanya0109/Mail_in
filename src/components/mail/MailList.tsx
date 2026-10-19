@@ -6,16 +6,11 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { appConfig } from "@/config/appConfig";
 import { useMail } from "@/context/MailContext";
-import { filterByFolder, formatListTime, stripHtml } from "@/lib/mail-helpers";
+import { filterByFolder, folderName, formatListTime, stripHtml } from "@/lib/mail-helpers";
 import { cn } from "@/lib/utils";
 import type { Category, Email } from "@/types/config";
 import { Avatar } from "./Avatar";
 import { ProfileMenu } from "./ProfileMenu";
-
-export function folderName(id: string) {
-  if (id.startsWith("label-")) return id.slice(6);
-  return appConfig.folders.find((f) => f.id === id)?.name ?? id;
-}
 
 export function MailList({ folder }: { folder: string }) {
   const { emails, tab, setTab, update, move, removeForever, setDrawerOpen, openCompose } = useMail();

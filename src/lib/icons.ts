@@ -1,11 +1,11 @@
-import type { ComponentType } from "react";
+import { createElement, type ComponentType } from "react";
 import { MaterialSymbol, type MaterialSymbolProps } from "@/components/mail/MaterialSymbol";
 
 type IconProps = Omit<MaterialSymbolProps, "name">;
 type IconComponent = ComponentType<IconProps>;
 
 const symbol = (name: string): IconComponent => {
-  return (props: IconProps) => <MaterialSymbol name={name} {...props} />;
+  return (props: IconProps) => createElement(MaterialSymbol, { name, ...props });
 };
 
 /** Gmail-like UI glyphs from Google's Material Symbols Rounded font. */
@@ -74,23 +74,24 @@ export const SearchX = symbol("search_off");
 export const Send = symbol("send");
 export const ShieldAlert = symbol("report");
 export const Smile = symbol("mood");
-export const Star = ({ filled = false, className, style }: IconProps & { filled?: boolean }) => (
-  <svg
-    aria-hidden="true"
-    className={`block ${className ?? ""}`}
-    style={{ ...style, transform: "none", transition: "none" }}
-    viewBox="0 0 24 24"
-    fill={filled ? "currentColor" : "none"}
-    focusable="false"
-  >
-    <path
-      d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-      stroke={filled ? "none" : "currentColor"}
-      strokeLinejoin="round"
-      strokeWidth={filled ? 0 : 1.7}
-    />
-  </svg>
-);
+export const Star = ({ filled = false, className, style }: IconProps & { filled?: boolean }) =>
+  createElement(
+    "svg",
+    {
+      "aria-hidden": true,
+      className: `block ${className ?? ""}`,
+      style: { ...style, transform: "none", transition: "none" },
+      viewBox: "0 0 24 24",
+      fill: filled ? "currentColor" : "none",
+      focusable: false,
+    },
+    createElement("path", {
+      d: "M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z",
+      stroke: filled ? "none" : "currentColor",
+      strokeLinejoin: "round",
+      strokeWidth: filled ? 0 : 1.7,
+    }),
+  );
 export const Sun = symbol("light_mode");
 export const Tag = symbol("label");
 export const Trash2 = symbol("delete");

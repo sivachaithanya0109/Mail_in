@@ -1,4 +1,10 @@
 import type { Category, Email, FolderId } from "@/types/config";
+import { appConfig } from "@/config/appConfig";
+
+export function folderName(id: string) {
+  if (id.startsWith("label-")) return id.slice(6);
+  return appConfig.folders.find((f) => f.id === id)?.name ?? id;
+}
 
 /** Strips scripts, event handlers and javascript: URLs from configurable HTML. */
 export function sanitizeHtml(html: string): string {

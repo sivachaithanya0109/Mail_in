@@ -28,10 +28,10 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { appConfig } from "@/config/appConfig";
 import { useMail } from "@/context/MailContext";
-import { formatFullTime, formatListTime, sanitizeHtml, stripHtml } from "@/lib/mail-helpers";
+import { folderName, formatFullTime, formatListTime, sanitizeHtml, stripHtml } from "@/lib/mail-helpers";
 import { cn } from "@/lib/utils";
 import { Avatar } from "./Avatar";
-import { IconBtn, folderName } from "./MailList";
+import { IconBtn } from "./MailList";
 import { SecuritySheet } from "./SecuritySheet";
 
 export function EmailDetail({ id }: { id: string }) {
