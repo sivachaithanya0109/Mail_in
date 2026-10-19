@@ -55,6 +55,7 @@ export const Inbox = symbol("inbox");
 export const Lock = symbol("lock");
 export const Mail = symbol("mail");
 export const MailOpen = symbol("mark_email_read");
+export const MailUnread = symbol("mark_email_unread");
 export const Menu = symbol("menu");
 export const MessageSquare = symbol("chat_bubble");
 export const Circle = symbol("radio_button_unchecked");
@@ -73,10 +74,23 @@ export const SearchX = symbol("search_off");
 export const Send = symbol("send");
 export const ShieldAlert = symbol("report");
 export const Smile = symbol("mood");
-export const Star: IconComponent = (props) => (
-  <MaterialSymbol name="star" filled={Boolean(props.className?.includes("fill-star"))} {...props} />
+export const Star = ({ filled = false, className, style }: IconProps & { filled?: boolean }) => (
+  <svg
+    aria-hidden="true"
+    className={`block ${className ?? ""}`}
+    style={{ ...style, transform: "none", transition: "none" }}
+    viewBox="0 0 24 24"
+    fill={filled ? "currentColor" : "none"}
+    focusable="false"
+  >
+    <path
+      d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+      stroke={filled ? "none" : "currentColor"}
+      strokeLinejoin="round"
+      strokeWidth={filled ? 0 : 1.7}
+    />
+  </svg>
 );
-Star.displayName = "MaterialSymbol(star)";
 export const Sun = symbol("light_mode");
 export const Tag = symbol("label");
 export const Trash2 = symbol("delete");

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
-  Archive, ArrowLeft, Inbox as InboxIcon, Mail, MailOpen, Menu, Paperclip, Pencil, Star, Tag, Trash2, Users, Undo2,
+  Archive, ArrowLeft, Inbox as InboxIcon, Mail, MailOpen, MailUnread, Menu, Paperclip, Pencil, Star, Tag, Trash2, Users, Undo2,
 } from "@/lib/icons";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -61,7 +61,7 @@ export function MailList({ folder }: { folder: string }) {
           {list.filter((e) => selected.includes(e.id)).some((e) => e.unread) ? (
             <IconBtn label="Mark as read" onClick={() => bulk(() => update(selected, { unread: false }), "{n} marked as read")}><MailOpen /></IconBtn>
           ) : (
-            <IconBtn label="Mark as unread" onClick={() => bulk(() => update(selected, { unread: true }), "{n} marked as unread")}><Mail /></IconBtn>
+            <IconBtn label="Mark as unread" onClick={() => bulk(() => update(selected, { unread: true }), "{n} marked as unread")}><MailUnread /></IconBtn>
           )}
         </header>
       ) : (
@@ -241,7 +241,7 @@ function Row({ email, selected, selecting, onToggle }: { email: Email; selected:
               onPointerDown={(e) => e.stopPropagation()}
               className="-mr-2 grid h-9 w-9 shrink-0 place-items-center rounded-full"
             >
-              <Star className={cn("h-5 w-5", email.starred ? "fill-star text-star" : "text-muted-foreground")} />
+              <Star filled={email.starred} className={cn("h-5 w-5", email.starred ? "text-star" : "text-muted-foreground")} />
             </button>
           </div>
           {appConfig.app.enableAttachments && email.attachments.length > 0 && (
@@ -280,7 +280,7 @@ function Row({ email, selected, selecting, onToggle }: { email: Email; selected:
           }}
           className="grid h-9 w-9 place-items-center rounded-full hover:bg-accent"
         >
-          <Star className={cn("h-5 w-5", email.starred ? "fill-star text-star" : "text-muted-foreground")} />
+          <Star filled={email.starred} className={cn("h-5 w-5", email.starred ? "text-star" : "text-muted-foreground")} />
         </button>
         <span className={cn("truncate pr-3", email.unread && "font-bold")}>{isDraft ? appConfig.text.draftPrefix : who}</span>
         <span className="flex min-w-0 items-center gap-2 overflow-hidden">

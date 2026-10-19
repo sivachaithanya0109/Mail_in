@@ -13,6 +13,7 @@ import {
   Image as ImageIcon,
   Lock,
   Mail,
+  MailUnread,
   MoreVertical,
   Reply,
   ReplyAll,
@@ -110,7 +111,7 @@ export function EmailDetail({ id }: { id: string }) {
   const menuItems: { label: string; icon: typeof Mail; run: () => void }[] = [
     {
       label: appConfig.text.markAsUnread,
-      icon: Mail,
+      icon: MailUnread,
       run: () => act(() => update([email.id], { unread: true }), appConfig.text.markedAsUnread),
     },
     {
@@ -232,7 +233,7 @@ export function EmailDetail({ id }: { id: string }) {
             act(() => update([email.id], { unread: true }), appConfig.text.markedAsUnread)
           }
         >
-          <Mail />
+          <MailUnread />
         </IconBtn>
         <IconBtn label={appConfig.text.moreOptions} onClick={() => setMenu(true)}>
           <MoreVertical />
@@ -254,9 +255,10 @@ export function EmailDetail({ id }: { id: string }) {
           className="grid h-10 w-10 shrink-0 place-items-center rounded-full hover:bg-accent"
         >
           <Star
+            filled={email.starred}
             className={cn(
               "h-6 w-6",
-              email.starred ? "fill-star text-star" : "text-muted-foreground",
+              email.starred ? "text-star" : "text-muted-foreground",
             )}
           />
         </button>
@@ -264,11 +266,18 @@ export function EmailDetail({ id }: { id: string }) {
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3 lg:px-10 lg:overscroll-auto">
         <section className="relative rounded-[1.75rem] bg-card px-4 py-4 lg:mx-auto lg:max-w-6xl lg:rounded-none lg:px-0 lg:py-2">
-          <div className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-start gap-3">
+          <div
+            className={cn(
+              "grid items-start gap-3",
+              email.unsubscribe
+                ? "grid-cols-[auto_minmax(0,1fr)_auto_auto]"
+                : "grid-cols-[auto_minmax(0,1fr)_repeat(3,auto)]",
+            )}
+          >
             <Avatar name={email.sender.name} src={email.sender.avatarUrl} />
             <div className="min-w-0 pt-1">
               <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5">
-                <span className="truncate font-medium">{email.sender.name}</span>
+                <span className="min-w-0 break-words font-medium">{email.sender.name}</span>
                 {email.verified && (
                   <BadgeCheck
                     aria-label={appConfig.text.verifiedSender}
@@ -292,18 +301,31 @@ export function EmailDetail({ id }: { id: string }) {
                 )}
               </button>
             </div>
-            {email.unsubscribe && (
+            {email.unsubscribe ? (
               <button
                 onClick={() => toast(appConfig.text.unsubscribeNotice)}
                 className="pt-2 text-sm font-medium text-link"
               >
                 {appConfig.text.unsubscribe}
               </button>
+            ) : (
+              <>
+                <IconBtn
+                  label={appConfig.text.reactToMessage}
+                  onClick={() => setReactionsOpen(true)}
+                  className="h-10 w-10"
+                >
+                  <Smile />
+                </IconBtn>
+                <IconBtn label={appConfig.text.reply} onClick={reply} className="h-10 w-10">
+                  <Reply />
+                </IconBtn>
+              </>
             )}
             <IconBtn
               label={appConfig.text.moreSenderActions}
               onClick={() => setMenu(true)}
-              className="-mr-2 -mt-1 h-10 w-10 [&_svg]:h-5 [&_svg]:w-5"
+              className="-mr-2 -mt-1 h-10 w-10"
             >
               <MoreVertical />
             </IconBtn>

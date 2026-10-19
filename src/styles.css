@@ -7,7 +7,7 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   font-family: "Material Symbols Rounded Variable", sans-serif;
   font-size: 1.25rem;
   font-style: normal;
@@ -106,7 +106,7 @@
   --security-modal: oklch(0.98 0.004 260);
   --security-modal-foreground: oklch(0.24 0.005 260);
   --selected: oklch(0.92 0.04 250);
-  --star: oklch(0.78 0.16 80);
+  --star: #1a73e8;
   --important: oklch(0.8 0.15 85);
   --chip: oklch(0.93 0.005 260);
   --pill: oklch(0.92 0.03 270);
