@@ -252,7 +252,7 @@ export function EmailDetail({ id }: { id: string }) {
         <button
           aria-label={email.starred ? appConfig.text.unstar : appConfig.text.star}
           onClick={() => update([email.id], { starred: !email.starred })}
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full hover:bg-accent"
+          className="-mr-1.5 grid h-10 w-10 shrink-0 place-items-center rounded-full hover:bg-accent"
         >
           <Star
             filled={email.starred}
