@@ -20,7 +20,7 @@ export function BottomNav() {
         return (
           <Link key={b.path} to={b.path} aria-label={b.label} className="flex flex-1 items-center justify-center">
             <span className={cn("relative flex h-8 w-14 items-center justify-center rounded-full", active ? "bg-pill text-pill-foreground" : "text-muted-foreground")}>
-              <Icon className="h-6 w-6" />
+              <Icon className="mail-icon-large h-7 w-7" />
               {b.path === "/" && unread > 0 && (
                 <span className="absolute -top-2 right-0 rounded-full bg-badge px-1.5 text-[10px] font-medium text-badge-foreground">{badge}</span>
               )}

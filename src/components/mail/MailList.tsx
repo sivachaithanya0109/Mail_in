@@ -294,7 +294,7 @@ function Row({ email, selected, selecting, onToggle }: { email: Email; selected:
 
 export function IconBtn({ label, onClick, children, className }: { label: string; onClick: () => void; children: React.ReactNode; className?: string }) {
   return (
-    <button aria-label={label} title={label} onClick={onClick} className={cn("grid h-12 w-12 shrink-0 place-items-center rounded-full hover:bg-accent [&_svg]:h-6 [&_svg]:w-6", className)}>
+    <button aria-label={label} title={label} onClick={onClick} className={cn("mail-toolbar-button grid h-12 w-12 shrink-0 place-items-center rounded-full hover:bg-accent [&_svg]:h-6 [&_svg]:w-6", className)}>
       {children}
     </button>
   );

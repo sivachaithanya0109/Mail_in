@@ -22,6 +22,16 @@
   font-feature-settings: "liga";
 }
 
+.mail-icon-large.material-symbol,
+.mail-toolbar-button .material-symbol {
+  font-size: 1.75rem;
+}
+
+.mail-toolbar-button svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
